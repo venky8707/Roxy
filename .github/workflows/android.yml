@@ -17,17 +17,16 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Check Project Files
-        run: |
-          echo "Checking ROCXY project..."
-          ls -la
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Check Project Files
+        run: ls -la
 
       - name: Install Dependencies
         run: |
@@ -36,7 +35,7 @@ jobs:
           elif [ -f package.json ]; then
             npm install
           else
-            echo "No package.json found. Checking static web files."
+            echo "No package.json found"
           fi
 
       - name: Build Web Project
@@ -44,11 +43,11 @@ jobs:
           if [ -f package.json ]; then
             npm run build --if-present
           else
-            echo "Static web project detected."
+            echo "Static web project detected"
           fi
 
       - name: Upload ROCXY Web Files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ROCXY-WEB
           path: |
