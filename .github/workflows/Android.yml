@@ -37,31 +37,23 @@ jobs:
 
       - name: Install Android SDK 35
         run: |
-          sdkmanager "platforms;android-35" \
-            "build-tools;35.0.0"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-            - name: Diagnose Project Structure
+      - name: Diagnose Project Structure
         run: |
-          echo "=== APP DIRECTORY ==="
-          ls -la app
-
-          echo "=== ALL APP FILES ==="
+          echo "=== ROOT ==="
+          ls -la
+          echo "=== APP FILES ==="
           find app -maxdepth 8 -type f
-
-          echo "=== REQUIRED FILE CHECK ==="
-
-          for file in \
-            settings.gradle.kts \
-            build.gradle.kts \
-            app/build.gradle.kts \
-            app/src/main/AndroidManifest.xml
-          do
+          echo "=== REQUIRED FILES ==="
+          for file in settings.gradle.kts build.gradle.kts app/build.gradle.kts app/src/main/AndroidManifest.xml; do
             if [ -f "$file" ]; then
               echo "FOUND: $file"
             else
               echo "MISSING: $file"
             fi
           done
+
       - name: Build Debug APK
         run: gradle assembleDebug --no-daemon
 
